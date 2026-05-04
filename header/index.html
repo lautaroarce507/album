@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Album</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">World Album</div>
+        <nav>
+            <a href="#">Album</a>
+            <a href="#">Tienda</a>
+            <a href="#">Zona de intercambio</a>
+            <a href="#" id="loginBtn">Iniciar sesión</a>
+        </nav>
+    </header>
+
+    <!-- HERO / COLLAGE -->
+    <section class="hero">
+        <img src="../assets/Centro.png" alt="Collage principal">
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        
+        <!-- Redes Sociales -->
+        <div class="social">
+            <img src="../assets/X.png" alt="X">
+            <img src="../assets/instagram.png" alt="Instagram">
+            <img src="../assets/facebook.png" alt="Facebook">
+        </div>
+
+        <!-- Contacto -->
+        <div class="contacto">
+            <p>Contacta via Email:</p>
+            <p>Worldalbum@gmail.com</p>
+        </div>
+
+        <!-- Métodos de Pago -->
+        <div class="pagos">
+            <img src="../assets/paypal.png" alt="PayPal">
+            <img src="../assets/merpago.png" alt="MercadoPago">
+            <img src="../assets/vicard.png" alt="Visa">
+        </div>
+
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        const loginBtn = document.getElementById("loginBtn");
+
+        loginBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            loginBtn.textContent = "Perfil";
+        });
+    </script>
+
+</body>
+</html>
