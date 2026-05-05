@@ -8,56 +8,47 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="logo">World Album</div>
-        <nav>
-            <a href="#">Album</a>
-            <a href="#">Tienda</a>
-            <a href="#">Zona de intercambio</a>
-            <a href="#" id="loginBtn">Iniciar sesión</a>
-        </nav>
-    </header>
+<header class="navbar">
+    <div class="logo">World Album</div>
+    <nav>
+        <a href="../album/index.html">Album</a>
+        <a href="#">Tienda</a>
+        <a href="#">Zona de intercambio</a>
+        <a href="#" id="loginBtn">Iniciar sesión</a>
+    </nav>
+</header>
 
-    <!-- HERO / COLLAGE -->
-    <section class="hero">
-        <img src="../assets/Centro.png" alt="Collage principal">
-    </section>
+<section class="hero">
+    <img src="../assets/Centro.png">
+</section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        
-        <!-- Redes Sociales -->
-        <div class="social">
-            <img src="../assets/X.png" alt="X">
-            <img src="../assets/instagram.png" alt="Instagram">
-            <img src="../assets/facebook.png" alt="Facebook">
-        </div>
+<footer class="footer">
+    <div class="social">
+        <img src="../assets/X.png">
+        <img src="../assets/instagram.png">
+        <img src="../assets/facebook.png">
+    </div>
 
-        <!-- Contacto -->
-        <div class="contacto">
-            <p>Contacta via Email:</p>
-            <p>Worldalbum@gmail.com</p>
-        </div>
+    <div class="contacto">
+        <p>Contacta via Email:</p>
+        <p>Worldalbum@gmail.com</p>
+    </div>
 
-        <!-- Métodos de Pago -->
-        <div class="pagos">
-            <img src="../assets/paypal.png" alt="PayPal">
-            <img src="../assets/merpago.png" alt="MercadoPago">
-            <img src="../assets/vicard.png" alt="Visa">
-        </div>
+    <div class="pagos">
+        <img src="../assets/paypal.png">
+        <img src="../assets/merpago.png">
+        <img src="../assets/vicard.png">
+    </div>
+</footer>
 
-    </footer>
+<script>
+const loginBtn = document.getElementById("loginBtn");
 
-    <!-- SCRIPT -->
-    <script>
-        const loginBtn = document.getElementById("loginBtn");
-
-        loginBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            loginBtn.textContent = "Perfil";
-        });
-    </script>
+loginBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    loginBtn.textContent = "Perfil";
+});
+</script>
 
 </body>
 </html>
