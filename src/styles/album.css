@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+:root { --bg: #0f172a; --text: #ffffff }
+html,body,#root{ height:100%; }
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+/* NAVBAR */
+.navbar {
+    background-color: #5BA4A4; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 60px;
+    color: white;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 60px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* SECCIONES */
+.country-card {
+    margin: 40px auto;
+    width: 90%;
+    max-width: 900px;
+}
+
+/* TITULOS */
+.country-card h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+/* GRID DE JUGADORES */
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+/* FIGURITAS */
+.card {
+    width: 100%;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+/* BLOQUEADAS (blanco y negro) */
+.locked {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+/* DESBLOQUEADAS */
+.unlocked {
+    filter: none;
+    opacity: 1;
+}
+
+/* HOVER */
+.locked:hover {
+    transform: scale(1.08);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .player-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .navbar nav {
+        gap: 20px;
+    }
+}
