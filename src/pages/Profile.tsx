@@ -86,8 +86,7 @@ export default function Profile() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background:
-          'linear-gradient(135deg,#1e3c72,#2a5298)'
+        background: '#ffffff' // <-- Fondo cambiado a blanco
       }}
     >
       <div
@@ -95,7 +94,8 @@ export default function Profile() {
           width: 350,
           background: '#fff',
           padding: 30,
-          borderRadius: 15
+          borderRadius: 15,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' // <-- Sombra agregada para resaltar el formulario
         }}
       >
         <h1 style={{ textAlign: 'center' }}>

@@ -2,9 +2,10 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Album from './components/Album'
-import Shop from './pages/Shop'
+import Shop from './pages/shopusuario'
 import Exchange from './pages/Exchange'
 import Profile from './pages/Profile'
+import ShopUsuario from './pages/shopusuario'
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Album />} />
-        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop" element={<ShopUsuario />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
