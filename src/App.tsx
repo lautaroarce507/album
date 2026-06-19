@@ -6,6 +6,7 @@ import Shop from './pages/shopusuario'
 import Exchange from './pages/Exchange'
 import Profile from './pages/Profile'
 import ShopUsuario from './pages/shopusuario'
+import Envelopes from './pages/Envelopes'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Album />} />
         <Route path="/shop" element={<ShopUsuario />} />
+        <Route path="/envelopes" element={<Envelopes />} />
         <Route path="/exchange" element={<Exchange />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

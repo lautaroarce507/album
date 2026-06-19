@@ -1,46 +1,216 @@
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 
 type Product = {
-  id: string
+  id: number
   name: string
   price: number
   image: string
   description: string
 }
 
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Figurita Dorada',
-    price: 1000, 
-    image: '/assets/figurita dorada.png',
-    description: 'Fifurita dorada Aleatoria.',
-  },
-  {
-    id: '2',
-    name: 'Sobre de figuritas',
-    price: 2500,
-    image: '/assets/sobre de figuritas.png',
-    description: 'Sobre con 7 figuritas.',
-  },
-]
-
 export default function ShopUsuario() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  
   const [cart, setCart] = useState<Product[]>([])
+  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [showCartList, setShowCartList] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
-      setProducts(INITIAL_PRODUCTS)
-      setLoading(false)
-    }, 500)
+    // 1. Obtener usuario logueado
+    const saved = localStorage.getItem('currentUser')
+    let userObj: any = null
+    if (saved) {
+      userObj = JSON.parse(saved)
+      setCurrentUser(userObj)
+    }
+
+    // 2. Obtener productos de la tienda
+    fetch('http://localhost:3000/shop')
+      .then((res) => {
+        if (!res.ok) throw new Error('Error al obtener productos')
+        return res.json()
+      })
+      .then((data) => {
+        setProducts(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setLoading(false)
+      })
+
+    // 3. Obtener el carrito del usuario si está autenticado
+    if (userObj) {
+      fetch(`http://localhost:3000/users/${userObj.id}/cart`)
+        .then((res) => {
+          if (!res.ok) throw new Error('Error al obtener carrito')
+          return res.json()
+        })
+        .then((data) => {
+          if (data && data.items) {
+            setCart(data.items)
+          }
+        })
+        .catch((err) => console.error(err))
+    }
   }, [])
 
-  const handleAddToCart = (product: Product) => {
-    setCart((prevCart) => [...prevCart, product])
+  const handleAddToCart = async (product: Product) => {
+    if (!currentUser) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Inicia sesión',
+        text: 'Debes iniciar sesión en tu Perfil para agregar productos al carrito.',
+        confirmButtonColor: '#1e3c72',
+        background: '#fff',
+      })
+      return
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: product.id }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al agregar al carrito')
+      }
+
+      const updatedCart = await response.json()
+      if (updatedCart && updatedCart.items) {
+        setCart(updatedCart.items)
+      }
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
+      Toast.fire({
+        icon: 'success',
+        title: `¡"${product.name}" agregado al carrito!`,
+      })
+    } catch (error) {
+      console.error(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo agregar el producto al carrito.',
+        confirmButtonColor: '#ef4444',
+        background: '#fff',
+      })
+    }
   }
+
+  const handleClearCart = async () => {
+    if (!currentUser) return
+    const result = await Swal.fire({
+      icon: 'question',
+      title: '¿Vaciar carrito?',
+      text: '¿Deseas vaciar tu carrito? Esta acción no se puede deshacer.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, vaciar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#64748b',
+      background: '#fff',
+    })
+    if (!result.isConfirmed) return
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al vaciar el carrito')
+      }
+
+      setCart([])
+      Swal.fire({
+        icon: 'success',
+        title: '¡Carrito vaciado!',
+        text: 'Tu carrito ha sido vaciado correctamente.',
+        confirmButtonColor: '#10b981',
+        background: '#fff',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+    } catch (error) {
+      console.error(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo vaciar el carrito.',
+        confirmButtonColor: '#ef4444',
+        background: '#fff',
+      })
+    }
+  }
+
+  const handleCheckout = async () => {
+    if (!currentUser) return
+    if (cart.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Carrito vacío',
+        text: 'Tu carrito está vacío. Agrega productos antes de finalizar la compra.',
+        confirmButtonColor: '#0f172a',
+        background: '#fff',
+      })
+      return
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart/checkout`, {
+        method: 'POST',
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al finalizar la compra')
+      }
+
+      setCart([])
+      Swal.fire({
+        icon: 'success',
+        title: '¡Compra exitosa! 🎉',
+        text: '¡Las figuritas se han añadido a tu álbum correctamente!',
+        confirmButtonColor: '#10b981',
+        background: '#fff',
+        timer: 3500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      })
+    } catch (error) {
+      console.error(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al comprar',
+        text: 'No se pudo finalizar la compra. Intenta nuevamente.',
+        confirmButtonColor: '#ef4444',
+        background: '#fff',
+      })
+    }
+  }
+
+  const totalAmount = cart.reduce((sum, item) => sum + item.price, 0)
+
+  // Agrupar productos repetidos
+  const groupedCart = cart.reduce((acc: any[], item) => {
+    const existing = acc.find(x => x.id === item.id)
+    if (existing) {
+      existing.quantity += 1
+    } else {
+      acc.push({ ...item, quantity: 1 })
+    }
+    return acc
+  }, [])
 
   return (
     <main
@@ -57,19 +227,91 @@ export default function ShopUsuario() {
           position: 'absolute',
           top: 20,
           right: 20,
-          background: '#d5c5f7ff', // Gris oscuro
-          padding: '8px 16px',
-          borderRadius: 8,
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+          background: '#ffffff', 
+          padding: '16px',
+          borderRadius: 12,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          border: '1px solid #e2e8f0',
           display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          cursor: 'pointer'
+          flexDirection: 'column',
+          gap: '10px',
+          zIndex: 10,
+          minWidth: '240px'
         }}
       >
-        <span style={{ color: '#ffffffff', fontSize: 16, fontWeight: 'bold' }}>
-          🛒 Ver Carrito({cart.length})
-        </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span 
+            onClick={() => setShowCartList(!showCartList)}
+            style={{ color: '#333333', fontSize: 14, fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', userSelect: 'none' }}
+            title={showCartList ? 'Ocultar lista' : 'Mostrar lista'}
+          >
+            🛒 Mi Carrito ({cart.length}) {showCartList ? '▼' : '▶'}
+          </span>
+          {cart.length > 0 && (
+            <button
+              onClick={handleClearCart}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#dc3545',
+                cursor: 'pointer',
+                fontSize: 12,
+                textDecoration: 'underline',
+                padding: 0
+              }}
+            >
+              Vaciar
+            </button>
+          )}
+        </div>
+        
+        {showCartList && cart.length > 0 && (
+          <div style={{ 
+            maxHeight: '120px', 
+            overflowY: 'auto', 
+            borderTop: '1px solid #f1f5f9', 
+            paddingTop: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}>
+            {groupedCart.map((item, index) => (
+              <div key={index} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#475569' }}>
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }} title={`${item.name} (${item.quantity} unidades)`}>
+                  {item.name} {item.quantity > 1 ? `x${item.quantity}` : ''}
+                </span>
+                <span style={{ fontWeight: '500' }}>${item.price * item.quantity}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 14, color: '#64748b' }}>Total:</span>
+          <span style={{ fontSize: 16, fontWeight: 'bold', color: '#1e293b' }}>
+            ${totalAmount}
+          </span>
+        </div>
+
+        {cart.length > 0 && (
+          <button
+            onClick={handleCheckout}
+            style={{
+              background: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: 6,
+              padding: '8px 12px',
+              fontSize: 13,
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              width: '100%',
+              transition: 'background 0.2s',
+            }}
+          >
+            Finalizar Compra
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -80,7 +322,7 @@ export default function ShopUsuario() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: 30,
-            maxWidth: 200, 
+            maxWidth: 1000, 
             margin: '80px auto 0' 
           }}
         >
@@ -100,7 +342,7 @@ export default function ShopUsuario() {
             >
               {/* Imagen del producto */}
               <img
-                src={product.image}
+                src={product.image || '/assets/sobre de figuritas.png'}
                 alt={product.name}
                 style={{
                   width: '80%',        
@@ -112,7 +354,6 @@ export default function ShopUsuario() {
               />
 
               <div style={{ width: '100%', boxSizing: 'border-box' }}>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                   <h2 style={{ margin: 0, fontSize: 18, color: 'white', fontWeight: 'normal' }}>
                     {product.name}
@@ -132,7 +373,7 @@ export default function ShopUsuario() {
                     textAlign: 'left',
                   }}
                 >
-                  {product.description}
+                  {product.description || `${product.stickersCount} figuritas.`}
                 </p>
 
                 <div
@@ -154,9 +395,8 @@ export default function ShopUsuario() {
                       fontWeight: 'bold',
                       fontSize: 14,
                       transition: 'background 0.2s',
+                      width: '100%',
                     }}
-                    onMouseOver={(e) => (e.currentTarget.style.background = '#549bf2ff')}
-                    onMouseOut={(e) => (e.currentTarget.style.background = '#549bf2ff')}
                   >
                     Agregar a carrito
                   </button>

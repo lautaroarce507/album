@@ -39,25 +39,23 @@ const mockDB = {
 }
 
 const api = {
-  fetchPacks(): Promise<Pack[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(mockDB.read()), 250)
-    })
+  async fetchPacks(): Promise<Pack[]> {
+    const res = await fetch('http://localhost:3000/shop')
+    if (!res.ok) throw new Error('Error al cargar sobres')
+    return res.json()
   },
-  createPack(payload: Omit<Pack, 'id' | 'createdAt'>): Promise<Pack> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const packs = mockDB.read()
-        const newPack: Pack = {
-          id: `${Date.now()}-${Math.round(Math.random() * 10000)}`,
-          createdAt: new Date().toISOString(),
-          ...payload,
-        }
-        const updated = [newPack, ...packs]
-        mockDB.write(updated)
-        resolve(newPack)
-      }, 300)
+  async createPack(payload: Omit<Pack, 'id' | 'createdAt'>): Promise<Pack> {
+    const res = await fetch('http://localhost:3000/shop', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: payload.name,
+        price: payload.price,
+        stickersCount: payload.stickersCount,
+      }),
     })
+    if (!res.ok) throw new Error('Error al crear sobre')
+    return res.json()
   },
 }
 
