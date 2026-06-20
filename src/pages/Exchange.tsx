@@ -20,6 +20,7 @@ type Trade = {
 }
 
 const ALL_STICKERS = [
+  { name: 'Escudo de Argentina', src: '/assets/3.png', country: 'Argentina' },
   { name: 'Emiliano Martínez', src: '/assets/dibu.png', country: 'Argentina' },
   { name: 'Nahuel Molina', src: '/assets/molina.png', country: 'Argentina' },
   { name: 'Cristian Romero', src: '/assets/romero.png', country: 'Argentina' },
@@ -32,6 +33,8 @@ const ALL_STICKERS = [
   { name: 'Lautaro Martínez', src: '/assets/lautaro.png', country: 'Argentina' },
   { name: 'Giovanni Simeone', src: '/assets/simeone.png', country: 'Argentina' },
   { name: 'Lionel Scaloni', src: '/assets/scaloni.png', country: 'Argentina' },
+  { name: 'Equipo de Argentina', src: '/assets/equipo_argentina.jpg', country: 'Argentina' },
+  { name: 'Escudo de Países Bajos', src: '/assets/escudo_paises_bajos.png', country: 'Países Bajos' },
   { name: 'Virgil van Dijk', src: '/assets/van%20dijk.png', country: 'Países Bajos' },
   { name: 'Denzel Dumfries', src: '/assets/dumfries.png', country: 'Países Bajos' },
   { name: 'Frenkie de Jong', src: '/assets/de%20jong.png', country: 'Países Bajos' },
@@ -44,6 +47,8 @@ const ALL_STICKERS = [
   { name: 'Bart Verbruggen', src: '/assets/verbruggen.png', country: 'Países Bajos' },
   { name: 'Ryan Gravenberch', src: '/assets/gravenberch.png', country: 'Países Bajos' },
   { name: 'Donyell Malen', src: '/assets/malen.png', country: 'Países Bajos' },
+  { name: 'Equipo de Países Bajos', src: '/assets/equipo_paises_bajos.jpg', country: 'Países Bajos' },
+  { name: 'Escudo de México', src: '/assets/escudo_mexico.png', country: 'México' },
   { name: 'Hirving Lozano', src: '/assets/lozano.png', country: 'México' },
   { name: 'Raúl Jiménez', src: '/assets/jimenez.png', country: 'México' },
   { name: 'Jesús Gallardo', src: '/assets/gallardo.png', country: 'México' },
@@ -56,7 +61,7 @@ const ALL_STICKERS = [
   { name: 'Marcel Ruiz', src: '/assets/ruiz.png', country: 'México' },
   { name: 'Edson Álvarez', src: '/assets/edison.png', country: 'México' },
   { name: 'Javier Aguirre', src: '/assets/aguirre.png', country: 'México' },
-]
+];
 
 const getStickerName = (src: string) => {
   const decoded = decodeURIComponent(src)
@@ -395,10 +400,11 @@ export default function Exchange() {
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(75px, 1fr))',
-                gap: '12px',
-                maxHeight: '220px',
+                gap: '14px',
+                maxHeight: '260px',
                 overflowY: 'auto',
-                paddingRight: '6px'
+                paddingRight: '6px',
+                paddingTop: '10px'
               }}>
                 {duplicatesList.map(([src, info]) => {
                   const name = getStickerName(src)
@@ -416,14 +422,15 @@ export default function Exchange() {
                       <img src={src} alt={name} style={{ width: '100%', borderRadius: '6px' }} />
                       <span style={{
                         position: 'absolute',
-                        top: '-6px',
-                        right: '-6px',
+                        top: '-8px',
+                        right: '-8px',
                         background: '#dc2626',
                         color: 'white',
                         fontWeight: 'bold',
-                        fontSize: '10px',
-                        padding: '2px 6px',
-                        borderRadius: '10px'
+                        fontSize: '12px',
+                        padding: '3px 7px',
+                        borderRadius: '12px',
+                        zIndex: 10
                       }}>
                         x{info.count}
                       </span>

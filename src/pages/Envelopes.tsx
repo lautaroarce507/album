@@ -28,6 +28,8 @@ const playerNamesMap: Record<string, string> = {
   '/assets/lautaro.png': 'Lautaro Martínez',
   '/assets/simeone.png': 'Giovanni Simeone',
   '/assets/scaloni.png': 'Lionel Scaloni',
+  '/assets/3.png': 'Escudo de Argentina',
+  '/assets/equipo_argentina.jpg': 'Equipo de Argentina',
   '/assets/van%20dijk.png': 'Virgil van Dijk',
   '/assets/dumfries.png': 'Denzel Dumfries',
   '/assets/de%20jong.png': 'Frenkie de Jong',
@@ -40,6 +42,8 @@ const playerNamesMap: Record<string, string> = {
   '/assets/verbruggen.png': 'Bart Verbruggen',
   '/assets/gravenberch.png': 'Ryan Gravenberch',
   '/assets/malen.png': 'Donyell Malen',
+  '/assets/escudo_paises_bajos.png': 'Escudo de Países Bajos',
+  '/assets/equipo_paises_bajos.jpg': 'Equipo de Países Bajos',
   '/assets/lozano.png': 'Hirving Lozano',
   '/assets/jimenez.png': 'Raúl Jiménez',
   '/assets/gallardo.png': 'Jesús Gallardo',
@@ -51,7 +55,9 @@ const playerNamesMap: Record<string, string> = {
   '/assets/malagon.png': 'Luis Malagón',
   '/assets/ruiz.png': 'Marcel Ruiz',
   '/assets/edison.png': 'Edson Álvarez',
-  '/assets/aguirre.png': 'Javier Aguirre'
+  '/assets/aguirre.png': 'Javier Aguirre',
+  '/assets/escudo_mexico.png': 'Escudo de México',
+  '/assets/equipo_mexico.jpg': 'Equipo de México'
 }
 
 export default function Envelopes() {
