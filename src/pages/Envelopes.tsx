@@ -12,6 +12,7 @@ type Figure = {
 type RevealItem = {
   figure: Figure
   isDuplicate: boolean
+  count?: number
 }
 
 // Map image path to player name for better display
@@ -57,7 +58,10 @@ const playerNamesMap: Record<string, string> = {
   '/assets/edison.png': 'Edson Álvarez',
   '/assets/aguirre.png': 'Javier Aguirre',
   '/assets/escudo_mexico.png': 'Escudo de México',
-  '/assets/equipo_mexico.jpg': 'Equipo de México'
+  '/assets/equipo_mexico.jpg': 'Equipo de México',
+  '/assets/leyenda_maradona.jpg': 'Jugador Leyenda',
+  '/assets/leyenda_cruyff.jpg': 'Jugador Leyenda',
+  '/assets/leyenda_sanchez.jpg': 'Jugador Leyenda'
 }
 
 export default function Envelopes() {
@@ -197,13 +201,75 @@ export default function Envelopes() {
       // Update envelope count locally
       fetchEnvelopes()
 
+      // Group identical cards
+      const groupedMap = new Map<string, RevealItem>()
+      for (const card of cards) {
+        const key = card.figure.name
+        if (groupedMap.has(key)) {
+          const existing = groupedMap.get(key)!
+          existing.count = (existing.count || 1) + 1
+          existing.isDuplicate = true
+        } else {
+          groupedMap.set(key, { ...card, count: 1 })
+        }
+      }
+
       // Set revealed cards for animation display
-      setRevealedCards(cards)
+      setRevealedCards(Array.from(groupedMap.values()))
     } catch (err: any) {
       console.error(err)
       Swal.fire({
         icon: 'error',
         title: 'No se pudo abrir el sobre',
+        text: err.message,
+        confirmButtonColor: '#ef4444',
+        background: '#1e293b',
+        color: '#fff',
+      })
+    } finally {
+      setIsOpening(false)
+    }
+  }
+
+  // 6. Open ALL action
+  const handleOpenAllEnvelopes = async () => {
+    if (!currentUser) return
+    setIsOpening(true)
+    setRevealedCards([])
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/envelopes/open-all`, {
+        method: 'POST'
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'No se pudieron abrir los sobres')
+      }
+
+      const cards: RevealItem[] = await response.json()
+      
+      fetchEnvelopes()
+
+      // Group identical cards
+      const groupedMap = new Map<string, RevealItem>()
+      for (const card of cards) {
+        const key = card.figure.name
+        if (groupedMap.has(key)) {
+          const existing = groupedMap.get(key)!
+          existing.count = (existing.count || 1) + 1
+          existing.isDuplicate = true
+        } else {
+          groupedMap.set(key, { ...card, count: 1 })
+        }
+      }
+
+      setRevealedCards(Array.from(groupedMap.values()))
+    } catch (err: any) {
+      console.error(err)
+      Swal.fire({
+        icon: 'error',
+        title: 'No se pudieron abrir los sobres',
         text: err.message,
         confirmButtonColor: '#ef4444',
         background: '#1e293b',
@@ -369,6 +435,26 @@ export default function Envelopes() {
               Abrir Dorado
             </button>
           </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <button
+              onClick={handleOpenAllEnvelopes}
+              disabled={isOpening || (!envelopeData?.normalCount && !envelopeData?.goldenCount)}
+              style={{
+                width: '100%',
+                background: '#dc2626',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                padding: '12px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                opacity: (!envelopeData?.normalCount && !envelopeData?.goldenCount) ? 0.4 : 1,
+              }}
+            >
+              Abrir Todos los Sobres 💥
+            </button>
+          </div>
         </div>
       </div>
 
@@ -430,7 +516,7 @@ export default function Envelopes() {
                   boxShadow: item.figure.isGolden ? '0 0 15px rgba(255,215,0,0.3)' : 'none',
                   animation: `revealCard 0.5s ease-out ${index * 0.1}s both`,
                 }}>
-                  <div className={`card-container ${item.figure.isGolden ? 'golden' : ''}`} style={{ width: '85px' }}>
+                  <div className={`card-container ${item.figure.isGolden ? 'golden' : ''}`} style={{ width: '85px', position: 'relative' }}>
                     <img
                       src={item.figure.name}
                       alt={name}
@@ -454,6 +540,21 @@ export default function Envelopes() {
                   }}>
                     {name}
                   </div>
+                  {item.count && item.count > 1 && (
+                    <div style={{
+                      background: 'rgba(255,255,255,0.1)',
+                      color: '#e2e8f0',
+                      fontWeight: 'bold',
+                      fontSize: '11px',
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      width: '100%',
+                      textAlign: 'center',
+                      boxSizing: 'border-box'
+                    }}>
+                      x{item.count}
+                    </div>
+                  )}
                   {item.isDuplicate ? (
                     <span style={{ fontSize: '10px', background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', padding: '2px 6px', borderRadius: '8px', fontWeight: 'bold' }}>
                       Repetida

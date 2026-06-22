@@ -34,6 +34,7 @@ const ALL_STICKERS = [
   { name: 'Giovanni Simeone', src: '/assets/simeone.png', country: 'Argentina' },
   { name: 'Lionel Scaloni', src: '/assets/scaloni.png', country: 'Argentina' },
   { name: 'Equipo de Argentina', src: '/assets/equipo_argentina.jpg', country: 'Argentina' },
+  { name: 'Jugador Leyenda', src: '/assets/leyenda_maradona.jpg', country: 'Argentina' },
   { name: 'Escudo de Países Bajos', src: '/assets/escudo_paises_bajos.png', country: 'Países Bajos' },
   { name: 'Virgil van Dijk', src: '/assets/van%20dijk.png', country: 'Países Bajos' },
   { name: 'Denzel Dumfries', src: '/assets/dumfries.png', country: 'Países Bajos' },
@@ -48,6 +49,7 @@ const ALL_STICKERS = [
   { name: 'Ryan Gravenberch', src: '/assets/gravenberch.png', country: 'Países Bajos' },
   { name: 'Donyell Malen', src: '/assets/malen.png', country: 'Países Bajos' },
   { name: 'Equipo de Países Bajos', src: '/assets/equipo_paises_bajos.jpg', country: 'Países Bajos' },
+  { name: 'Jugador Leyenda', src: '/assets/leyenda_cruyff.jpg', country: 'Países Bajos' },
   { name: 'Escudo de México', src: '/assets/escudo_mexico.png', country: 'México' },
   { name: 'Hirving Lozano', src: '/assets/lozano.png', country: 'México' },
   { name: 'Raúl Jiménez', src: '/assets/jimenez.png', country: 'México' },
@@ -61,6 +63,7 @@ const ALL_STICKERS = [
   { name: 'Marcel Ruiz', src: '/assets/ruiz.png', country: 'México' },
   { name: 'Edson Álvarez', src: '/assets/edison.png', country: 'México' },
   { name: 'Javier Aguirre', src: '/assets/aguirre.png', country: 'México' },
+  { name: 'Jugador Leyenda', src: '/assets/leyenda_sanchez.jpg', country: 'México' },
 ];
 
 const getStickerName = (src: string) => {
@@ -410,27 +413,26 @@ export default function Exchange() {
                   const name = getStickerName(src)
                   return (
                     <div key={src} style={{
-                      position: 'relative',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       background: '#f8fafc',
                       padding: '6px',
                       borderRadius: '10px',
-                      border: info.isGolden ? '2.5px solid #ffd700' : '1px solid #e2e8f0'
+                      border: info.isGolden ? '2.5px solid #ffd700' : '1px solid #e2e8f0',
+                      gap: '6px'
                     }} title={name}>
                       <img src={src} alt={name} style={{ width: '100%', borderRadius: '6px' }} />
                       <span style={{
-                        position: 'absolute',
-                        top: '-8px',
-                        right: '-8px',
-                        background: '#dc2626',
-                        color: 'white',
+                        background: '#e2e8f0',
+                        color: '#475569',
                         fontWeight: 'bold',
                         fontSize: '12px',
-                        padding: '3px 7px',
-                        borderRadius: '12px',
-                        zIndex: 10
+                        padding: '2px 8px',
+                        borderRadius: '6px',
+                        width: '100%',
+                        textAlign: 'center',
+                        boxSizing: 'border-box'
                       }}>
                         x{info.count}
                       </span>

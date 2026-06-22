@@ -114,6 +114,20 @@ body {
     cursor: pointer;
 }
 
+/* LEYENDA BLOQUEADA */
+.legend-locked {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    font-weight: bold;
+    color: #475569;
+    background: #1e293b;
+    border: 2px dashed #475569;
+    aspect-ratio: 2/3;
+    cursor: pointer;
+}
+
 /* DESBLOQUEADAS */
 .unlocked {
     filter: none;

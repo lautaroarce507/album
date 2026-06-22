@@ -7,6 +7,7 @@ type Player = {
   position: string
   number?: number
   isDT?: boolean
+  isLegend?: boolean
 }
 
 type Country = {
@@ -31,7 +32,8 @@ const countries: Country[] = [
       { filename: 'lautaro.png', fullName: 'Lautaro Martínez', position: 'Delantero', number: 22 },
       { filename: 'simeone.png', fullName: 'Giovanni Simeone', position: 'Delantero', number: 18 },
       { filename: 'scaloni.png', fullName: 'Lionel Scaloni', position: 'Director Técnico', isDT: true },
-      { filename: 'equipo_argentina.jpg', fullName: 'Equipo de Argentina', position: 'Equipo' }
+      { filename: 'equipo_argentina.jpg', fullName: 'Equipo de Argentina', position: 'Equipo' },
+      { filename: 'leyenda_maradona.jpg', fullName: 'Jugador Leyenda', position: 'Leyenda', isLegend: true }
     ]
   },
   {
@@ -50,7 +52,8 @@ const countries: Country[] = [
       { filename: 'verbruggen.png', fullName: 'Bart Verbruggen', position: 'Arquero', number: 1 },
       { filename: 'gravenberch.png', fullName: 'Ryan Gravenberch', position: 'Mediocampista', number: 8 },
       { filename: 'malen.png', fullName: 'Donyell Malen', position: 'Delantero', number: 18 },
-      { filename: 'equipo_paises_bajos.jpg', fullName: 'Equipo de Países Bajos', position: 'Equipo' }
+      { filename: 'equipo_paises_bajos.jpg', fullName: 'Equipo de Países Bajos', position: 'Equipo' },
+      { filename: 'leyenda_cruyff.jpg', fullName: 'Jugador Leyenda', position: 'Leyenda', isLegend: true }
     ]
   },
   {
@@ -69,7 +72,8 @@ const countries: Country[] = [
       { filename: 'ruiz.png', fullName: 'Marcel Ruiz', position: 'Mediocampista', number: 14 },
       { filename: 'edison.png', fullName: 'Edson Álvarez', position: 'Mediocampista', number: 4 },
       { filename: 'aguirre.png', fullName: 'Javier Aguirre', position: 'Director Técnico', isDT: true },
-      { filename: 'equipo_mexico.jpg', fullName: 'Equipo de México', position: 'Equipo' }
+      { filename: 'equipo_mexico.jpg', fullName: 'Equipo de México', position: 'Equipo' },
+      { filename: 'leyenda_sanchez.jpg', fullName: 'Jugador Leyenda', position: 'Leyenda', isLegend: true }
     ]
   }
 ]
@@ -84,6 +88,7 @@ export default function Album() {
     position: string
     number?: number
     isDT?: boolean
+    isLegend?: boolean
     src: string
     isUnlocked: boolean
     isGolden: boolean
@@ -204,18 +209,33 @@ export default function Album() {
                     gridColumn: isTeam ? 'span 2' : 'span 1'
                   }}>
                     <div className={`card-container ${isGolden ? 'golden' : ''}`}>
-                      <img
-                        src={src}
-                        alt={p.fullName}
-                        className={`card ${isUnlocked ? 'unlocked' : 'locked'} ${isGolden ? 'golden' : ''}`}
-                        onClick={() => setSelectedPlayer({
-                          ...p,
-                          src,
-                          isUnlocked,
-                          isGolden,
-                          country: c.name
-                        })}
-                      />
+                      {p.isLegend && !isUnlocked ? (
+                        <div
+                          className="card legend-locked"
+                          onClick={() => setSelectedPlayer({
+                            ...p,
+                            src,
+                            isUnlocked,
+                            isGolden,
+                            country: c.name
+                          })}
+                        >
+                          ?
+                        </div>
+                      ) : (
+                        <img
+                          src={src}
+                          alt={p.fullName}
+                          className={`card ${isUnlocked ? 'unlocked' : 'locked'} ${isGolden ? 'golden' : ''}`}
+                          onClick={() => setSelectedPlayer({
+                            ...p,
+                            src,
+                            isUnlocked,
+                            isGolden,
+                            country: c.name
+                          })}
+                        />
+                      )}
                     </div>
                     <div style={{ fontSize: '12px', fontWeight: 'bold', textAlign: 'center', color: '#000000', minHeight: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {p.fullName}
@@ -237,11 +257,17 @@ export default function Album() {
             </button>
             <div className="modal-img-container" style={{ width: selectedPlayer.position === 'Equipo' ? '320px' : '200px' }}>
               <div className={`card-container ${selectedPlayer.isGolden ? 'golden' : ''}`}>
-                <img
-                  src={selectedPlayer.src}
-                  alt={selectedPlayer.fullName}
-                  className={`card ${selectedPlayer.isUnlocked ? 'unlocked' : 'locked'} ${selectedPlayer.isGolden ? 'golden' : ''}`}
-                />
+                {selectedPlayer.isLegend && !selectedPlayer.isUnlocked ? (
+                  <div className="card legend-locked" style={{ aspectRatio: '2/3', fontSize: '80px', width: '100%' }}>
+                    ?
+                  </div>
+                ) : (
+                  <img
+                    src={selectedPlayer.src}
+                    alt={selectedPlayer.fullName}
+                    className={`card ${selectedPlayer.isUnlocked ? 'unlocked' : 'locked'} ${selectedPlayer.isGolden ? 'golden' : ''}`}
+                  />
+                )}
               </div>
             </div>
             <div className="modal-info">
