@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 type Figure = {
   id: number
   name: string
@@ -102,7 +104,7 @@ export default function Exchange() {
     if (!currentUser) return
 
     // Fetch Duplicates
-    const fetchDup = fetch(`http://localhost:3000/users/${currentUser.id}/album/duplicates`)
+    const fetchDup = fetch(`${API_URL}/users/${currentUser.id}/album/duplicates`)
       .then(res => res.json())
       .then((data: Figure[]) => {
         const dupMap: Record<string, { count: number; isGolden: boolean }> = {}
@@ -117,7 +119,7 @@ export default function Exchange() {
       })
 
     // Fetch Album to find missing stickers
-    const fetchAlbum = fetch(`http://localhost:3000/users/${currentUser.id}/album`)
+    const fetchAlbum = fetch(`${API_URL}/users/${currentUser.id}/album`)
       .then(res => res.json())
       .then((album: { figures: Figure[] }) => {
         const obtainedNames = new Set(
@@ -128,7 +130,7 @@ export default function Exchange() {
       })
 
     // Fetch Public Pending Trades
-    const fetchPublic = fetch('http://localhost:3000/trades')
+    const fetchPublic = fetch(`${API_URL}/trades`)
       .then(res => res.json())
       .then((data: Trade[]) => {
         // filter out current user's proposals so they only see other people's offers in the public market
@@ -136,7 +138,7 @@ export default function Exchange() {
       })
 
     // Fetch My Trades history
-    const fetchMy = fetch(`http://localhost:3000/users/${currentUser.id}/trades`)
+    const fetchMy = fetch(`${API_URL}/users/${currentUser.id}/trades`)
       .then(res => res.json())
       .then((data: Trade[]) => {
         setMyTrades(data)
@@ -184,7 +186,7 @@ export default function Exchange() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/users/${currentUser.id}/trades`, {
+      const res = await fetch(`${API_URL}/users/${currentUser.id}/trades`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -238,7 +240,7 @@ export default function Exchange() {
     })
     if (!result.isConfirmed) return
     try {
-      const res = await fetch(`http://localhost:3000/users/${currentUser.id}/trades/${tradeId}/cancel`, {
+      const res = await fetch(`${API_URL}/users/${currentUser.id}/trades/${tradeId}/cancel`, {
         method: 'POST'
       })
       if (!res.ok) throw new Error('Error al cancelar la propuesta')
@@ -280,7 +282,7 @@ export default function Exchange() {
     })
     if (!result.isConfirmed) return
     try {
-      const res = await fetch(`http://localhost:3000/users/${currentUser.id}/trades/${tradeId}/accept`, {
+      const res = await fetch(`${API_URL}/users/${currentUser.id}/trades/${tradeId}/accept`, {
         method: 'POST'
       })
       if (!res.ok) {
@@ -325,7 +327,7 @@ export default function Exchange() {
     })
     if (!result.isConfirmed) return
     try {
-      const res = await fetch(`http://localhost:3000/users/${currentUser.id}/trades/${tradeId}`, {
+      const res = await fetch(`${API_URL}/users/${currentUser.id}/trades/${tradeId}`, {
         method: 'DELETE',
       })
       if (!res.ok) {

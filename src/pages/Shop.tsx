@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 type Pack = {
   id: string
   name: string
@@ -40,12 +42,12 @@ const mockDB = {
 
 const api = {
   async fetchPacks(): Promise<Pack[]> {
-    const res = await fetch('http://localhost:3000/shop')
+    const res = await fetch(`${API_URL}/shop`)
     if (!res.ok) throw new Error('Error al cargar sobres')
     return res.json()
   },
   async createPack(payload: Omit<Pack, 'id' | 'createdAt'>): Promise<Pack> {
-    const res = await fetch('http://localhost:3000/shop', {
+    const res = await fetch(`${API_URL}/shop`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

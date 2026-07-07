@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 type Figure = {
   id: number
   name: string
@@ -86,7 +88,7 @@ export default function Envelopes() {
   // 2. Fetch Envelope counts and status
   const fetchEnvelopes = () => {
     if (!currentUser) return
-    fetch(`http://localhost:3000/users/${currentUser.id}/envelopes`)
+    fetch(`${API_URL}/users/${currentUser.id}/envelopes`)
       .then((res) => {
         if (!res.ok) throw new Error('Error al cargar sobres')
         return res.json()
@@ -145,7 +147,7 @@ export default function Envelopes() {
   const handleClaimFree = async () => {
     if (!currentUser || !canClaim) return
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/envelopes/claim`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/envelopes/claim`, {
         method: 'POST',
       })
       if (!response.ok) {
@@ -185,7 +187,7 @@ export default function Envelopes() {
     setRevealedCards([])
 
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/envelopes/open`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/envelopes/open`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type }),
@@ -238,7 +240,7 @@ export default function Envelopes() {
     setRevealedCards([])
 
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/envelopes/open-all`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/envelopes/open-all`, {
         method: 'POST'
       })
 

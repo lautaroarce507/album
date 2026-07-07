@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../../src/styles/album.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 type Player = {
   filename: string
   fullName: string
@@ -102,7 +104,7 @@ export default function Album() {
       setCurrentUser(userObj)
       
       // Cargar figuritas del backend
-      fetch(`http://localhost:3000/users/${userObj.id}/album`)
+      fetch(`${API_URL}/users/${userObj.id}/album`)
         .then((res) => {
           if (!res.ok) throw new Error('Error al cargar álbum')
           return res.json()

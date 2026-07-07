@@ -1,0 +1,230 @@
+/* =============================================
+   WELCOME PAGE STYLES
+   ============================================= */
+
+.welcome-container {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background image */
+.welcome-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.welcome-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.4) saturate(1.2);
+  transform: scale(1.05);
+  transition: transform 8s ease;
+}
+
+.welcome-container:hover .welcome-bg-img {
+  transform: scale(1.0);
+}
+
+/* Dark gradient overlay */
+.welcome-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 40, 0.75) 0%,
+    rgba(0, 30, 80, 0.65) 40%,
+    rgba(100, 0, 0, 0.55) 100%
+  );
+}
+
+/* Main content */
+.welcome-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.welcome-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Trophy icon */
+.welcome-trophy {
+  font-size: 5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+  animation: trophyFloat 3s ease-in-out infinite;
+}
+
+@keyframes trophyFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Subtitle "Bienvenidos a" */
+.welcome-subtitle {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0 0 0.3rem 0;
+  font-weight: 300;
+}
+
+/* Title */
+.welcome-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  margin: 0.2rem 0 0.5rem 0;
+  letter-spacing: -2px;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+}
+
+.welcome-title-world {
+  color: #ffffff;
+  display: block;
+}
+
+.welcome-title-album {
+  display: block;
+  background: linear-gradient(90deg, #ffd700, #ffaa00, #ff6600);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 10px rgba(255, 165, 0, 0.5));
+}
+
+/* Stars divider */
+.welcome-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.welcome-divider-star {
+  font-size: 1.5rem;
+  animation: starSpin 4s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+}
+
+.welcome-divider-star:nth-child(2) {
+  animation-delay: 0.3s;
+  font-size: 2rem;
+}
+
+.welcome-divider-star:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes starSpin {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.3) rotate(180deg); }
+}
+
+/* Description */
+.welcome-description {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.8;
+  margin: 0 0 2.5rem 0;
+  font-weight: 300;
+}
+
+/* Enter button */
+.welcome-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #1a1a2e;
+  background: linear-gradient(90deg, #ffd700, #ffaa00);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 4px 20px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.welcome-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.welcome-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 8px 30px rgba(0,0,0,0.5);
+}
+
+.welcome-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.welcome-btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-btn-arrow {
+  font-size: 1.3rem;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.welcome-btn:hover .welcome-btn-arrow {
+  transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .welcome-trophy {
+    font-size: 3.5rem;
+  }
+  .welcome-subtitle {
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+  .welcome-description {
+    font-size: 0.95rem;
+  }
+  .welcome-btn {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+  }
+}

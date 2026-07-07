@@ -22,12 +22,15 @@ export default function Header() {
   return (
     <header className="navbar-container">
       <div className="navbar-content">
-        <NavLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+        <NavLink to="/album" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
           <img src="/assets/logo.png" alt="World Album" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
           <span className="logo-gradient">World Album</span>
         </NavLink>
         <nav className="nav-links">
-          <NavLink to="/" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+            Inicio
+          </NavLink>
+          <NavLink to="/album" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             Álbum
           </NavLink>
           <NavLink to="/shop" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>

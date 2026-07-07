@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+
 type Product = {
   id: number
   name: string
@@ -26,7 +28,7 @@ export default function ShopUsuario() {
     }
 
     // 2. Obtener productos de la tienda
-    fetch('http://localhost:3000/shop')
+    fetch(`${API_URL}/shop`)
       .then((res) => {
         if (!res.ok) throw new Error('Error al obtener productos')
         return res.json()
@@ -42,7 +44,7 @@ export default function ShopUsuario() {
 
     // 3. Obtener el carrito del usuario si está autenticado
     if (userObj) {
-      fetch(`http://localhost:3000/users/${userObj.id}/cart`)
+      fetch(`${API_URL}/users/${userObj.id}/cart`)
         .then((res) => {
           if (!res.ok) throw new Error('Error al obtener carrito')
           return res.json()
@@ -69,7 +71,7 @@ export default function ShopUsuario() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/cart`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId: product.id }),
@@ -123,7 +125,7 @@ export default function ShopUsuario() {
     if (!result.isConfirmed) return
 
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/cart`, {
         method: 'DELETE',
       })
 
@@ -168,7 +170,7 @@ export default function ShopUsuario() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/users/${currentUser.id}/cart/checkout`, {
+      const response = await fetch(`${API_URL}/users/${currentUser.id}/cart/checkout`, {
         method: 'POST',
       })
 
